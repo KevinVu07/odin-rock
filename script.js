@@ -15,43 +15,54 @@ function getComputerChoice() {
   return computerChoices[randomizeChoice];
 }
 
-function playRound(playerSelection, computerSelection) {
+let playerScore = 0;
+let computerScore = 0;
+
+function checkWinner(playerSelection, computerSelection) {
   if (playerSelection === computerSelection) {
-    return "It is a tie!";
+    return "tie";
   } else if (whatBeatsWhat[playerSelection] === computerSelection) {
-    return `You won! ${playerSelection} beats ${computerSelection}.`;
+    return "player";
   } else if (whatBeatsWhat[computerSelection] === playerSelection) {
-    return `You lost! ${computerSelection} beats ${playerSelection}.`;
-  } else {
-    return "Invalid input. Selection can only be Rock, Paper, or Scissor. Please try again.";
+    return "computer";
   }
 }
 
-let playerScore = 0;
-let computerScore = 0;
-const computerSelection = getComputerChoice();
-let playerSelection = prompt("Please choose your weapon: Rock, Paper, or Scissor?").toLowerCase();
-console.log(playerSelection, computerSelection);
-console.log(playerScore);
-console.log(computerScore);
-// console.log(playRound(playerSelection, computerSelection));
+function playRound(playerSelection, computerSelection) {
+  const winner = checkWinner(playerSelection, computerSelection);
+  if (winner == "tie") {
+    return "It is a tie!";
+  } else if (winner == "player") {
+    return `You won! ${playerSelection} beats ${computerSelection}.`;
+  } else if (winner == "computer") {
+    return `You lost! ${computerSelection} beats ${playerSelection}.`;
+  } else {
+    return "Invalid input. Selection can only be Rock, Paper, or Scissors. Please try again.";
+  }
+}
 
-function game(playerSelection, computerSelection) {
+function game() {
   for (let i = 1; i <= 5; i++) {
-    playRound(playerSelection, computerSelection);
-    switch (playRound(playerSelection, computerSelection)) {
-      case `You won! ${playerSelection} beats ${computerSelection}.`:
+    const playerSelection = prompt("Please choose your weapon: Rock, Paper, or Scissor?").toLowerCase();
+    const computerSelection = getComputerChoice();
+    const result = checkWinner(playerSelection, computerSelection);
+    console.log(result);
+    switch (result) {
+      case "player":
         playerScore++;
+        console.log("You won! Player score is " + playerScore);
         break;
-      case `You lost! ${computerSelection} beats ${playerSelection}.`:
+      case "computer":
         computerScore++;
+        console.log("You lost! Computer score is " + computerScore);
         break;
-      case "It is a tie!":
+      case "tie":
+        console.log(`Tie. Player score is ${playerScore} and computer score is ${computerScore}`);
     }
   }
 }
 
-game(playerSelection, computerSelection);
+game();
 
 if (playerScore > computerScore) {
   console.log("You won against the computer! The end of the Earth is not hear yet!");
